@@ -5,6 +5,12 @@ class TennisGame1
     @player2Name = player2Name
     @p1points = 0
     @p2points = 0
+    @stnd_score_board = {
+      0 => 'Love',
+      1 => 'Fifteen',
+      2 => 'Thirty',
+      3 => 'Forty'
+    }
   end
 
   def won_point(playerName)
@@ -22,22 +28,15 @@ class TennisGame1
   end
 
   def normal_score
-    result = ''
+    result = ['', '-', '']
     (1...3).each do |i|
       if i == 1
-        temp_score = @p1points
+        result[0] = @stnd_score_board[@p1points]
       else
-        result += '-'
-        temp_score = @p2points
+        result[2] = @stnd_score_board[@p2points]
       end
-      result += {
-        0 => 'Love',
-        1 => 'Fifteen',
-        2 => 'Thirty',
-        3 => 'Forty'
-      }[temp_score]
     end
-    result
+    result.join('')
   end
 
   def points_draw
