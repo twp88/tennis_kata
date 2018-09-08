@@ -17,50 +17,65 @@ class TennisGame2
   end
 
   def score
-    if @p1_points == @p2_points && @p1_points < 3
-      result = draw_score
-    elsif @p1_points == @p2_points && @p1_points > 2
-      result = 'Deuce'
+    result = DRAW_SCOREBOARD[@p1_points] if p1_p2_drawing?
+    result = LOVE_SCOREBOARD1[@p1_points] if p1_love?
+    result = LOVE_SCOREBOARD2[@p2_points] if p2_love?
+
+    if p1_beating_p2? || p2_beating_p1?
+      result = NORMAL_SCOREBOARD[@p1_points] +
+               '-' +
+               NORMAL_SCOREBOARD[@p2_points]
     end
 
-    if @p1_points > 0 && @p2_points.zero?
-      result = p1_love_score(@p1_points)
-    elsif @p2_points > 0 && @p1_points.zero?
-      result = p2_love_score(@p2_points)
-    end
+    result = 'Advantage ' + @player1_name if advantage_p1?
+    result = 'Advantage ' + @player2_name if advantage_p2?
 
-    if @p1_points > @p2_points && @p1_points < 4
-      p2_res = NORMAL_SCOREBOARD[@p2_points]
-      p1_res = NORMAL_SCOREBOARD[@p1_points]
-      result = p1_res + '-' + p2_res
-    end
-    if @p2_points > @p1_points && @p2_points < 4
-      p2_res = NORMAL_SCOREBOARD[@p2_points]
-      p1_res = NORMAL_SCOREBOARD[@p1_points]
-      result = p1_res + '-' + p2_res
-    end
-    if @p1_points > @p2_points && @p2_points >= 3
-      result = 'Advantage ' + @player1_name
-    elsif @p2_points > @p1_points && @p1_points >= 3
-      result = 'Advantage ' + @player2_name
-    end
-    if @p1_points >= 4 && @p2_points >= 0 && @p1_points - @p2_points >= 2
-      result = 'Win for ' + @player1_name
-    elsif @p2_points >= 4 && @p1_points >= 0 && @p2_points - @p1_points >= 2
-      result = 'Win for ' + @player2_name
-    end
+    result = 'Win for ' + @player1_name if p1_beaten_p2?
+    result = 'Win for ' + @player2_name if p2_beaten_p1?
+    result = 'Deuce' if deuce?
+
     result
   end
 
-  def draw_score
-    DRAW_SCOREBOARD[@p1_points]
+  private
+
+  def p1_love?
+    @p1_points > 0 && @p2_points.zero?
   end
 
-  def p1_love_score(p1_player)
-    LOVE_SCOREBOARD1[p1_player]
+  def p2_love?
+    @p2_points > 0 && @p1_points.zero?
   end
 
-  def p2_love_score(p1_player)
-    LOVE_SCOREBOARD2[p1_player]
+  def p1_p2_drawing?
+    @p1_points == @p2_points && @p1_points < 3
+  end
+
+  def deuce?
+    @p1_points == @p2_points && @p1_points > 2
+  end
+
+  def advantage_p1?
+    @p1_points > @p2_points && @p2_points >= 3
+  end
+
+  def advantage_p2?
+    @p2_points > @p1_points && @p1_points >= 3
+  end
+
+  def p1_beating_p2?
+    @p1_points > @p2_points && @p1_points < 4
+  end
+
+  def p2_beating_p1?
+    @p2_points > @p1_points && @p2_points < 4
+  end
+
+  def p1_beaten_p2?
+    @p1_points >= 4 && @p2_points >= 0 && @p1_points - @p2_points >= 2
+  end
+
+  def p2_beaten_p1?
+    @p2_points >= 4 && @p1_points >= 0 && @p2_points - @p1_points >= 2
   end
 end
