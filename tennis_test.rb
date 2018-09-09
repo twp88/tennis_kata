@@ -1,7 +1,7 @@
-require File.join(File.dirname(__FILE__), 'tennis')
 require File.join(File.dirname(__FILE__), 'tennis_game1')
 require File.join(File.dirname(__FILE__), 'tennis_game2')
-#require_relative("tennis")
+require File.join(File.dirname(__FILE__), 'tennis_game3')
+
 require 'test/unit'
 
 TEST_CASES = [
